@@ -1,14 +1,17 @@
-const modes = [["Major", "Ionian"], "Dorian", "Phrygian", "Lydian", "Mixolydian", ["Natural Minor", "Aeolian"], "Locrian"];
+//const modes = [["Major", "Ionian"], "Dorian", "Phrygian", "Lydian", "Mixolydian", ["Natural Minor", "Aeolian"], "Locrian"];
 const isSharpedScales = ["B", "E", "A", "D", "G", "C"];
 
 const cMajor = ["C", "D", "E", "F", "G", "A", "B"];
 const fMajor = ["F", "G", "A", "Bb", "C", "D", "E"];
 
 const table = document.getElementById("table");
+const tableBody = document.querySelector("tbody");
 const buttons = document.getElementsByTagName("button");
 
 class Scale {
   constructor(rootNote, scale) {
+    this.sharped = [];
+    this.flatted = [];
     this[rootNote] = scale; 
   }
 
@@ -30,12 +33,10 @@ class Scale {
 
 // diyezli gamlar
 const sharpedScales = new Scale(cMajor[0], cMajor);
-
+sharpedScales.sharped.push(sharpedScales.C);
+console.log(sharpedScales);
 // bemollü gamlar
 const flattedScales = new Scale(fMajor[0], fMajor);
-
-console.log(sharpedScales);
-console.log(flattedScales);
 
 // kullanıcının seçtiği nota
 let note = "";
@@ -47,9 +48,8 @@ for (button of buttons) {
     // tıklanan nota diyezli gam mı ?
     if (isSharpedScales.indexOf(note) !== -1) {
       let scale = sharpedScales.search(note);
-      //console.log(Array.isArray(scale));
-      //console.log(scale);
-      drawTable(scale);
+      console.log(scale);
+//      drawRow(scale);
     }
     let scale = flattedScales.search(note);
     drawTable(scale);
@@ -90,29 +90,17 @@ flattedScales.createScale = function(note) {
 
 function rearrange(scale) {
   let temp = scale.shift(0);
-  console.log(temp);
   scale.push(temp);
 }
-
-function drawRow(scale, index) {
-  const tr = document.createElement("tr");
-  let header = document.createElement("th");
-  header.innerText = scale[0];
-  header.innerText += " " + modes[index];
-  tr.appendChild(header); // sütuna başlık ekle 	
-  // dizinin son hali üzerinde döngü  
-  scale.forEach((note,index) => {
-    table.appendChild(tr);
-    let td = document.createElement("td");
-    td.innerText = note;
-    tr.appendChild(td); // notaları sütuna ekle
-    table.appendChild(tr); // tabloya sütunu ekle
-  });
+function drawRow(scale) {
+  let td = document.createElement("td");
+  td.textContent = scale;
+  let tr = document.getElementsByTagName("tr");
+  console.log(td);
+  //td.appendChild(tr[1]);
 }
 
 function drawTable(scale) {
-  scale.forEach((item, index, arr) => {
-    drawRow(arr, index);
-    rearrange(arr);
+    scale.forEach((item, index, arr) => {
   });
-} 
+}
