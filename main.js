@@ -28,13 +28,20 @@ class SharpedScale {
 
   // kullanıcının seçtiği notayı objenin içerisinde ara
   search(userInputNote) {
-    //console.log(this.sharped);
-    let i = 0;
-    while(this.sharped[i].indexOf(userInputNote) !== 0) {
-      this.append(); 
-      i++;
+    for (let i in this.sharped) {
+      if (this.sharped[i][0] == userInputNote) {
+        return this.sharped[i];
+      } 
     }
-    return this.sharped[i--];
+  }
+
+  // gam oluşturulana kadar ekle
+  appendTill(scale, note) {
+    while(!Array.isArray(scale)) {
+      this.append();
+      scale = this.search(note);
+    }
+    return scale;
   }
 }
 
@@ -51,11 +58,17 @@ let note = "";
 // butonlara click eventi ata
 for (button of buttons) {
   button.addEventListener("click", (event) => {
+    console.table(sharpedScales);
     note = event.target.textContent; // user input
     // tıklanan nota diyezli gam mı ?
     if (isSharpedScales.indexOf(note) !== -1) {
-      console.log(sharpedScales.search(note));
-//      drawRow(scale);
+      let scale = sharpedScales.search(note);
+      if (Array.isArray(scale)) {
+        console.log(scale);
+      } else {
+        scale = sharpedScales.appendTill(scale, note);
+        console.log(scale);
+      }
     }
   });
 }
@@ -91,6 +104,6 @@ function drawRow(scale) {
 }
 
 function drawTable(scale) {
-    scale.forEach((item, index, arr) => {
+  scale.forEach((item, index, arr) => {
   });
 }
