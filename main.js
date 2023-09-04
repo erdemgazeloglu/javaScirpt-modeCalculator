@@ -8,35 +8,42 @@ const table = document.getElementById("table");
 const tableBody = document.querySelector("tbody");
 const buttons = document.getElementsByTagName("button");
 
-class Scale {
+class SharpedScale {
   constructor(rootNote, scale) {
     this.sharped = [];
     this.flatted = [];
-    this[rootNote] = scale; 
   }
 
-  // yalnızca dizileri döndürür.
-  getScales() {
-    return (Object.keys(this).filter((item) => Array.isArray(this[item])));
+  append() {
+    // bir önceki dizinin 4. elemanını başa alma
+    let lastScale = this.sharped[this.sharped.length - 1];
+    let temp = lastScale.slice(0, 4);
+    let newScale = lastScale.slice(4, 7);
+    newScale = newScale.concat(temp);
+    newScale[newScale.length - 1] += "#";
+    this.sharped.push(newScale);
+    //console.log(newScale);
+    //lastScale[4]
   }
 
   // kullanıcının seçtiği notayı objenin içerisinde ara
   search(userInputNote) {
-    let scales = this.getScales();
-    //console.log(scales);
-    while (!this.hasOwnProperty(userInputNote)) {
-      this.createScale();
+    //console.log(this.sharped);
+    let i = 0;
+    while(this.sharped[i].indexOf(userInputNote) !== 0) {
+      this.append(); 
+      i++;
     }
-    return this[userInputNote]
+    return this.sharped[i--];
   }
 }
 
 // diyezli gamlar
-const sharpedScales = new Scale(cMajor[0], cMajor);
-sharpedScales.sharped.push(sharpedScales.C);
-console.log(sharpedScales);
-// bemollü gamlar
-const flattedScales = new Scale(fMajor[0], fMajor);
+const sharpedScales = new SharpedScale();
+// başlangıç gamını giriyoruz.
+sharpedScales.sharped.push(cMajor);
+//sharpedScales.append();
+
 
 // kullanıcının seçtiği nota
 let note = "";
@@ -47,12 +54,9 @@ for (button of buttons) {
     note = event.target.textContent; // user input
     // tıklanan nota diyezli gam mı ?
     if (isSharpedScales.indexOf(note) !== -1) {
-      let scale = sharpedScales.search(note);
-      console.log(scale);
+      console.log(sharpedScales.search(note));
 //      drawRow(scale);
     }
-    let scale = flattedScales.search(note);
-    drawTable(scale);
   });
 }
 
@@ -72,26 +76,12 @@ sharpedScales.createScale = function() {
   this[newScale[0]] = newScale;
 }
 
-flattedScales.createScale = function(note) {
-  // Yalnızca array niteliklerini içeren diziyi alın
-  let scales = this.getScales();
-  // İşlemi her zaman en son gam üzerinden yapıyoruz.
-  let lastScale = scales[scales.length - 1];
-  // gamın bir shallow copy'sini aldık
-  let newScale = [...this[lastScale]];
-  // ilk dört elemanı çıkartıp sonuna ekledik.
-  let extracted = newScale.splice(0, 3);
-  // son elemana bemol atanır.
-  newScale[newScale.length - 1] += "b";
-  newScale = newScale.concat(extracted);
-  // son elemana diyez attık
-  this[newScale[0]] = newScale;
-}
 
 function rearrange(scale) {
   let temp = scale.shift(0);
   scale.push(temp);
 }
+
 function drawRow(scale) {
   let td = document.createElement("td");
   td.textContent = scale;
