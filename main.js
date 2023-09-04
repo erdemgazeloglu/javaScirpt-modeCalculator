@@ -36,7 +36,7 @@ class Scales {
   }
 
   // gam oluşturulana kadar ekle
-  appendToSharpedToSharpedScaleTill(scale, note) {
+  appendToSharpedTill(scale, note) {
     while(!Array.isArray(scale)) {
       this.appendToSharped();
       scale = this.searchInSharped(note);
@@ -64,45 +64,36 @@ for (button of buttons) {
       let scale = scales.searchInSharped(note);
       if (Array.isArray(scale)) {
         console.log(scale);
+        drawRow(scale);
       } else {
-        scale = scales.appendToSharpedToSharpedScaleTill(scale, note);
+        scale = scales.appendToSharpedTill(scale, note);
         console.log(scale);
+        drawRow(scale);
       }
     }
   });
 }
 
-// bir önceki gamdan sokraki gamı objeye ekler
-scales.createScale = function() {
-  // Yalnızca array niteliklerini içeren diziyi alın
-  let scales = this.getScales();
-  // İşlemi her zaman en son gam üzerinden yapıyoruz.
-  let lastScale = scales[scales.length - 1];
-  // gamın bir shallow copy'sini aldık
-  let newScale = [...this[lastScale]];
-  // ilk dört elemanı çıkartıp sonuna ekledik.
-  let extracted = newScale.splice(0, 4);
-  newScale = newScale.concat(extracted); 
-  // son elemana diyez attık
-  newScale[newScale.length - 1] += "#";
-  this[newScale[0]] = newScale;
-}
-
-
-function rearrange(scale) {
+function makeModes(scale) {
   let temp = scale.shift(0);
   scale.push(temp);
 }
 
 function drawRow(scale) {
-  let td = document.createElement("td");
-  td.textContent = scale;
   let tr = document.getElementsByTagName("tr");
-  console.log(td);
-  //td.appendToSharpedChild(tr[1]);
+  for (let i=1; i < tr.length; i++) {
+    let td = tr[i].querySelector('td');
+
+    // Eğer mevcut bir td varsa, onun içeriğini değiştir
+    if (td) {
+      td.textContent = scale;
+    } else {
+      // Yoksa yeni bir td ekleme
+      let td = document.createElement("td");
+      td.textContent = scale;
+      tr[i].appendChild(td);
+      makeModes(scale);
+    }
+  }
 }
 
-function drawTable(scale) {
-  scale.forEach((item, index, arr) => {
-  });
-}
