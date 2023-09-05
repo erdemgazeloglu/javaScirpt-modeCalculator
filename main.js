@@ -43,14 +43,44 @@ class Scales {
     }
     return scale;
   }
+
+  // Flatted dizisine bir nota ekleme işlemini gerçekleştirir
+  appendToFlatted() {
+    // bir önceki dizinin 3. elemanını başa alma
+    let lastScale = this.flatted[this.flatted.length - 1];
+    let temp = lastScale.slice(0, 3);
+    let newScale = lastScale.slice(3, 7);
+    newScale[newScale.length - 1] += "b";
+    newScale = newScale.concat(temp);
+    this.flatted.push(newScale);
+  }
+
+  // Flatted dizisinde bir nota arama işlemini gerçekleştirir
+  searchInFlatted(userInputNote) {
+    for (let i in this.flatted) {
+      if (this.flatted[i][0] == userInputNote) {
+        return this.flatted[i];
+      } 
+    }
+  }
+
+  // Flatted dizisi oluşturulana kadar notaları ekler
+  appendToFlattedTill(scale, note) {
+    while (!Array.isArray(scale)) {
+      this.appendToFlatted();
+      scale = this.searchInFlatted(note);
+    }
+    return scale;
+  }
 }
 
-// diyezli gamlar
+// gamlar
 const scales = new Scales();
-// başlangıç gamını giriyoruz.
-scales.sharped.push(cMajor);
-//scales.appendToSharped();
 
+// diyezli gamlar için başlangıç gamını giriyoruz.
+scales.sharped.push(cMajor);
+// bemollü gamlar için başlangıç gamını giriyoruz.
+scales.flatted.push(fMajor);
 
 // kullanıcının seçtiği nota
 let note = "";
@@ -67,6 +97,16 @@ for (button of buttons) {
         drawRow(scale);
       } else {
         scale = scales.appendToSharpedTill(scale, note);
+        console.log(scale);
+        drawRow(scale);
+      }
+    } else {
+      let scale = scales.searchInFlatted(note);
+      if (Array.isArray(scale)) {
+        console.log(scale);
+        drawRow(scale);
+      } else {
+        scale = scales.appendToFlattedTill(scale, note);
         console.log(scale);
         drawRow(scale);
       }
@@ -92,8 +132,8 @@ function drawRow(scale) {
       let td = document.createElement("td");
       td.textContent = scale;
       tr[i].appendChild(td);
-      makeModes(scale);
     }
+    makeModes(scale);
   }
 }
 
