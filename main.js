@@ -133,6 +133,17 @@ function drawRow(scale) {
       td.textContent = scale;
       tr[i].appendChild(td);
     }
+
+    // Başına scale[0] eklemek için <th> içeriğini güncelleyin
+    let th = tr[i].querySelector('th');
+    // bu regex yalnızca eklenen scale[0] karakterlerini yakalar.
+    let regex = /^[A-G](?:[b#])? /;
+    if(regex.test(th.textContent) == true) {
+      th.textContent = th.textContent.replace(regex, scale[0] + " ");
+    } else {
+      th.textContent = scale[0] + ' ' + th.textContent;
+    }
+
     makeModes(scale);
   }
 }

@@ -1,5 +1,65 @@
 body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  gap: 15px;
   background-color: #121212;
   color: #EEE;
+  font-size: 20px;
+}
+
+table {
+  margin: auto;
+  padding: 10px;
+  border:2px solid white;
+  width: 70%;
+  border-collapse: collapse;
+}
+
+table, tr, td, th {
+  padding 10px;
+  margin-top: 40px;
+  border-bottom: 1px solid #fff;
+}
+
+thead {
+  text-align: center;
+  background-color: #ff5f00;
+}
+
+tbody th {
+  height: 35px;
+  text-align: left;
+  vertical-align: center;
+  padding: 15px;
+}
+
+tbody td {
+  text-align: center;
+  vertical-align: center;
+  padding: 10px;
+}
+
+tr:nth-child(even) {
+  background-color: #000;
+}
+
+/* Style for buttons */
+button {
+  padding: 10px 20px;
+  font-size: 18px;
+  background-color: #ff5f00;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Smooth hover effect */
+}
+
+/* Button hover effect */
+button:hover {
+  background-color: #ff8533;
 }
 
