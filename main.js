@@ -1,19 +1,18 @@
-//const modes = [["Major", "Ionian"], "Dorian", "Phrygian", "Lydian", "Mixolydian", ["Natural Minor", "Aeolian"], "Locrian"];
-const isScaless = ["B", "E", "A", "D", "G", "C"];
+const isScales = ["B", "E", "A", "D", "G", "C"];
 
 const cMajor = ["C", "D", "E", "F", "G", "A", "B"];
 const fMajor = ["F", "G", "A", "Bb", "C", "D", "E"];
 
 const table = document.getElementById("table");
-const tableBody = document.querySelector("tbody");
 const buttons = document.getElementsByTagName("button");
 
 class Scales {
-  constructor(rootNote, scale) {
+  constructor(scale) {
     this.sharped = [];
     this.flatted = [];
   }
 
+  // Sharped dizisine bir nota ekleme işlemini gerçekleştirir
   appendToSharped() {
     // bir önceki dizinin 4. elemanını başa alma
     let lastScale = this.sharped[this.sharped.length - 1];
@@ -22,8 +21,6 @@ class Scales {
     newScale = newScale.concat(temp);
     newScale[newScale.length - 1] += "#";
     this.sharped.push(newScale);
-    //console.log(newScale);
-    //lastScale[4]
   }
 
   // kullanıcının seçtiği notayı objenin içerisinde ara
@@ -90,24 +87,20 @@ for (button of buttons) {
   button.addEventListener("click", (event) => {
     note = event.target.textContent; // user input
     // tıklanan nota diyezli gam mı ?
-    if (isScaless.indexOf(note) !== -1) {
+    if (isScales.indexOf(note) !== -1) {
       let scale = scales.searchInSharped(note);
       if (Array.isArray(scale)) {
-        console.log(scale);
         drawRow(scale);
       } else {
         scale = scales.appendToSharpedTill(scale, note);
-        console.log(scale);
         drawRow(scale);
       }
     } else {
       let scale = scales.searchInFlatted(note);
       if (Array.isArray(scale)) {
-        console.log(scale);
         drawRow(scale);
       } else {
         scale = scales.appendToFlattedTill(scale, note);
-        console.log(scale);
         drawRow(scale);
       }
     }
