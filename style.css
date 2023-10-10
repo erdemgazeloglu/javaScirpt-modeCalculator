@@ -4,15 +4,12 @@ body {
   justify-content: center;
   align-items: center;
   align-content: center;
-  gap: 15px;
   background-color: #121212;
   color: #EEE;
   font-size: 20px;
 }
 
 table {
-  margin: auto;
-  padding: 10px;
   border:2px solid white;
   width: 70%;
   max-width: 600px;
